@@ -8,7 +8,7 @@
         <div class="row" style="border-bottom: solid 1px">
             <div class="form-group">
                 <label><b>PDB Id</b></label>
-                <input type="text" name="idCode" size="5" maxlength="4" v-model="idCode" placeholder="PDB Code"/>
+                <input type="text" name="idCode" size="5" maxlength="4" v-model="inputData.idCode" placeholder=""/>
             </div>
         </div>
         <div class="row">
@@ -17,10 +17,10 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label>Resolution</label>
+                    <label><b>Resolution:</b></label>
                     <p>                    
-                        From <input type="text" name="minRes" size="5" v-model="minRes">
-                        to <input type="text" name="maxRes" size="5" v-model="maxRes" >
+                        From <input type="text" name="minRes" size="5" v-model="inputData.minRes">
+                        to <input type="text" name="maxRes" size="5" v-model="inputData.maxRes" >
                     </p>
                 </div>
             </div>
@@ -29,11 +29,11 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label>Compound Type:</label>
-                    <div class="form-check">
-                        <div style="display:block" v-for='comp in compTypes' :key='comp._id'>
-                            <input class="form-check-input" type="checkbox" :id="comp._id" :value="comp._id" v-model="checkedComps" :name="comp._id" />
-                            {{ comp._id }}
+                    <label><b>Compound Type:</b></label>
+                    <div class="form-check-inline form-check">
+                        <div v-for='comp in compTypes' :key='comp._id'>
+                            <input class="form-check-input" type="checkbox" :id="comp._id" :value="comp._id" v-model="inputData.checkedComps" :name="comp._id" />
+                            <label class="form-check-label" :for="comp._id">{{comp._id}}&nbsp;</label>
                         </div>
                     </div>
                 </div>
@@ -42,10 +42,11 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label>Exp. Type:</label>
-                    <div class="form-check">
+                    <label><b>Exp. Type:</b></label>
+                    <div class="form-check" >
                         <div v-for='exp in expClasses' :key='exp._id'>
-                            <input class="form-check-input" type="checkbox" :id="exp._id" :value="exp._id" :name="exp._id" v-model="checkedExp" /> {{ exp._id }}
+                            <input class="form-check-input" type="checkbox" :id="exp._id" :value="exp._id" :name="exp._id" v-model="inputData.checkedExp" /> 
+                            <label :for="exp._id" class="form-check-label" >{{ exp._id }}&nbsp; </label>
                         </div>
                     </div>
                 </div>
@@ -54,9 +55,9 @@
 
         <div class="row" style="border-bottom: 1px solid">
             <div class="col-md-6">
-                <label><h4> Text Search</h4></label>
+                <label><b>Free Text Search</b></label>
                 <div class="form-group">
-                    <input type="text" name="query" v-model="query" style="width:100%" />
+                    <input type="text" name="query" v-model="inputData.query" style="width:100%" />
                 </div>
             </div>
         </div>
@@ -64,8 +65,8 @@
             <div class="col-md-6">
                 <label><h4>Sequence search</h4></label>
                 <div class="form-group">
-                    <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%" v-model="seqQuery"></textarea><br>
-                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%"/>
+                    <textarea class="form-control" name="seqQuery" style="width:100%" v-model="inputData.seqQuery"></textarea><br>
+                    Upload sequence file: <input type="file" name="seqFile" v-bind="inputData.seqFile" style="width:100%"/>
                 </div>
             </div>
         </div>
@@ -84,24 +85,25 @@
     export default {
         data() {
             return {
-                idCode: '',
-                minRes: '0.0',
-                maxRes: 'Inf',
-                idCompType: [],
-                idExpClasse: [],
-                query:'',
-                seqQuery:'',
-                seqFile:'',
+                inputData:{
+                    idCode: '',
+                    minRes: '0.0',
+                    maxRes: 'Inf',
+                    query:'',
+                    seqQuery:'',
+                    seqFile:'',
+                    checkedComps:[],
+                    checkedExp:[]
+                },
                 compTypes:[],
                 expClasses:[],
-                checkedComps:[],
-                checkedExp:[]
             }
         },
 
         methods: {
-            onsubmit() {
-                return "hola"
+            onSubmit() {
+                console.log(this.inputData);
+                return false;
             }
         },
 
@@ -112,9 +114,8 @@
                 this.compTypes = pdbInfo.Data.compTypes;
                 this.expClasses = pdbInfo.Data.expClasses;
             }           
-        },
-        fetchOnServer: false
-
+        }
+        
     }
 
 </script>
