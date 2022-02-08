@@ -64,7 +64,7 @@
                 <label><h4>Sequence search</h4></label>
                 <div class="form-group">
                     <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%" v-model="seqQuery"></textarea><br>
-                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%"/>
+                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%" @change="getFile"/>
                 </div>
             </div>
         </div>
@@ -98,7 +98,12 @@
             submit() {
                 if (this.idCode) {
                     this.$router.push({"path":"/show?id=" + this.idCode})
+                } else if (this.seqQuery) {
+                    this.$router.push({"path": "/blast?query=" + this.seqQuery})
+                } else {
+                    this.$router.push({"path": "/search?query=" + this})
                 }
+                
             },
             reset() {
                 this.idCode = ''
@@ -108,11 +113,23 @@
                 this.seqQuery = ''
                 this.checkedComps = []
                 this.checkedExp = []
+            },
+            async getFile(e) {
+                const file = e.target.files[0];
+                
+                if (!file) return;
+                
+                const readData = (f) => new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsBinaryString(f);
+                });
+                this.seqQuery = await readData(file);
             }
         },
 
         async fetch() {
-            const response = await fetch('http://localhost/DBW/PDBBrowser/api/?glob')
+            const response = await fetch('http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?glob')
             if (response.ok) {
                 const pdbInfo = await response.json();
                 this.compTypes = pdbInfo.compType;

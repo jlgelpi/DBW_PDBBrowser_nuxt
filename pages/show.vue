@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="container">
     <h1>{{ title }} - {{ pdbData.idCode}}</h1>
     <table class="table table-hover">
     <tbody>
@@ -74,7 +74,7 @@ export default {
         }
     },
     async fetch() {
-            const prefix = 'http://localhost/DBW/PDBBrowser/api/?';
+            const prefix = 'http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?';
             const response = await fetch(prefix + 'glob')
             if (response.ok) {
                 const pdbInfo = await response.json();
