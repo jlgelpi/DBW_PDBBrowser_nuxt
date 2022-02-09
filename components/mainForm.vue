@@ -1,14 +1,14 @@
 <template>
     <div id="mainForm">
-        <form
+        <!-- <form
           accept-charset="UTF-8"
           v-on:submit.prevent="onSubmit()"
           method="POST"
-        >
+        > -->
         <div class="row" style="border-bottom: solid 1px">
             <div class="form-group">
                 <label><b>PDB Id</b></label>
-                <input type="text" name="idCode" size="5" maxlength="4" v-model="inputData.idCode" placeholder=""/>
+                <input type="text" v-on:change="submit()" name="idCode" size="5" maxlength="4" v-model="idCode" placeholder="PDB Code"/>
             </div>
         </div>
         <div class="row">
@@ -29,11 +29,10 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><b>Compound Type:</b></label>
-                    <div class="form-check-inline form-check">
-                        <div v-for='comp in compTypes' :key='comp._id'>
-                            <input class="form-check-input" type="checkbox" :id="comp._id" :value="comp._id" v-model="inputData.checkedComps" :name="comp._id" />
-                            <label class="form-check-label" :for="comp._id">{{comp._id}}&nbsp;</label>
+                    <label>Compound Type:</label>
+                    <div class="form-check">
+                        <div style="display:block" v-for='(comp, index) in compTypes' :key="index">
+                            <input class="form-check-input" type="checkbox" :id="index" :value="index" v-model="checkedComps" /> {{ comp }}
                         </div>
                     </div>
                 </div>
@@ -42,11 +41,10 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><b>Exp. Type:</b></label>
-                    <div class="form-check" >
-                        <div v-for='exp in expClasses' :key='exp._id'>
-                            <input class="form-check-input" type="checkbox" :id="exp._id" :value="exp._id" :name="exp._id" v-model="inputData.checkedExp" /> 
-                            <label :for="exp._id" class="form-check-label" >{{ exp._id }}&nbsp; </label>
+                    <label>Exp. Type:</label>
+                    <div class="form-check">
+                        <div v-for='(exp, index) in expClasses' :key='index'>
+                            <input class="form-check-input" type="checkbox" :id="index" :value="index" v-model="checkedExp" /> {{ exp }}
                         </div>
                     </div>
                 </div>
@@ -65,19 +63,18 @@
             <div class="col-md-6">
                 <label><h4>Sequence search</h4></label>
                 <div class="form-group">
-                    <textarea class="form-control" name="seqQuery" style="width:100%" v-model="inputData.seqQuery"></textarea><br>
-                    Upload sequence file: <input type="file" name="seqFile" v-bind="inputData.seqFile" style="width:100%"/>
+                    <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%" v-model="seqQuery"></textarea><br>
+                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%" @change="getFile"/>
                 </div>
             </div>
         </div>
         <div class="row">
             <p>
-            <button type='submit' class="btn btn-primary">Submit</button>
-            <button type='reset' class="btn btn-primary">Reset</button>
-            <button class="btn btn-primary" onclick="window.location.href='/?new=1'">New Search</button>
+            <button class="btn btn-primary" v-on:click="submit()">Submit</button>
+            <button class="btn btn-primary" v-on:click="reset()">Reset</button>
             </p>
         </div>
-    </form>
+    <!-- </form> -->
     </div>
 </template>
 
@@ -85,34 +82,56 @@
     export default {
         data() {
             return {
-                inputData:{
-                    idCode: '',
-                    minRes: '0.0',
-                    maxRes: 'Inf',
-                    query:'',
-                    seqQuery:'',
-                    seqFile:'',
-                    checkedComps:[],
-                    checkedExp:[]
-                },
+                idCode: '',
+                minRes: '0.0',
+                maxRes: 'Inf',
+                query:'',
+                seqQuery:'',
                 compTypes:[],
                 expClasses:[],
             }
         },
 
         methods: {
-            onSubmit() {
-                console.log(this.inputData);
-                return false;
+            submit() {
+                if (this.idCode) {
+                    this.$router.push({"path":"/show?id=" + this.idCode})
+                } else if (this.seqQuery) {
+                    this.$router.push({"path": "/blast?query=" + this.seqQuery})
+                } else {
+                    this.$router.push({"path": "/search?query=" + this})
+                }
+                
+            },
+            reset() {
+                this.idCode = ''
+                this.minRes = '0.0'
+                this.maxRes = 'Inf'
+                this.query = ''
+                this.seqQuery = ''
+                this.checkedComps = []
+                this.checkedExp = []
+            },
+            async getFile(e) {
+                const file = e.target.files[0];
+                
+                if (!file) return;
+                
+                const readData = (f) => new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsBinaryString(f);
+                });
+                this.seqQuery = await readData(file);
             }
         },
 
         async fetch() {
-            const response = await fetch('http://mmb.irbbarcelona.org/api/pdb/info')
+            const response = await fetch('http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?glob')
             if (response.ok) {
                 const pdbInfo = await response.json();
-                this.compTypes = pdbInfo.Data.compTypes;
-                this.expClasses = pdbInfo.Data.expClasses;
+                this.compTypes = pdbInfo.compType;
+                this.expClasses = pdbInfo.expClasse;
             }           
         }
         
