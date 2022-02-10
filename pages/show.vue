@@ -1,7 +1,8 @@
 <template>
 <div class="container">
     <h1>{{ title }} - {{ pdbData.idCode}}</h1>
-    <table class="table table-hover">
+    <p v-if="$fetchState.pending">Waiting data...</p>
+    <table v-else class="table table-hover">
     <tbody>
         <tr>
             <td>PDB reference</td>
