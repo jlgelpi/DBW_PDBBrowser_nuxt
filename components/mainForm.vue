@@ -57,7 +57,7 @@
             <div class="col-md-6">
                 <label><b>Free Text Search</b></label>
                 <div class="form-group">
-                    <input type="text" name="query" v-model="query" style="width:100%" />
+                    <input type="text" name="query" v-model="query" v-on:change="submit()" style="width:100%" />
                 </div>
             </div>
         </div>
