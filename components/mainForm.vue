@@ -1,63 +1,60 @@
 <template>
     <div id="mainForm">
-        <!-- <form
-          accept-charset="UTF-8"
-          v-on:submit.prevent="onSubmit()"
-          method="POST"
-        > -->
-        <div class="row" style="border-bottom: solid 1px">
+        <div class="row" style="padding-bottom:5px;border-bottom: solid 1px">
             <div class="form-group">
                 <label><b>PDB Id</b></label>
                 <input type="text" v-on:change="submit()" name="idCode" size="5" maxlength="4" v-model="idCode" placeholder="PDB Code"/>
             </div>
         </div>
-        <div class="row">
-            <h3>Search fields</h3>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label><b>Resolution:</b></label>
-                    <p>                    
-                        From <input type="text" name="minRes" size="5" v-model="minRes">
-                        to <input type="text" name="maxRes" size="5" v-model="maxRes" >
-                    </p>
+        <div style="padding-bottom:5px;border-bottom: solid 1px">
+            <div class="row">
+                <h3>Search fields</h3>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label><b>Resolution:</b></label>
+                        <p>                    
+                            From <input type="text" name="minRes" size="5" v-model="minRes">
+                            to <input type="text" name="maxRes" size="5" v-model="maxRes" >
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Compound Type:</label>
-                    <div class="form-check">
-                        <div style="display:block" v-for='(comp, index) in compTypes' :key="index">
-                            <input class="form-check-input" type="checkbox" :id="index" :value="index" 
-                            v-model="checkedComps" /> {{ comp }}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Compound Type:</label>
+                        <div class="form-check">
+                            <div style="display:block" v-for='(comp, index) in compTypes' :key="index">
+                                <input class="form-check-input" type="checkbox" :id="index" :value="index" 
+                                v-model="checkedComps" /> {{ comp }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label>Exp. Type:</label>
-                    <div class="form-check">
-                        <div v-for='(exp, index) in expClasses' :key='index'>
-                            <input class="form-check-input" type="checkbox" :id="index" :value="index" 
-                            v-model="checkedExp" /> {{ exp }}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Exp. Type:</label>
+                        <div class="form-check">
+                            <div v-for='(exp, index) in expClasses' :key='index'>
+                                <input class="form-check-input" type="checkbox" :id="index" :value="index" 
+                                v-model="checkedExp" /> {{ exp }}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row" style="border-bottom: 1px solid">
-            <div class="col-md-6">
-                <label><b>Free Text Search</b></label>
-                <div class="form-group">
-                    <input type="text" name="query" v-model="query" v-on:change="submit()" style="width:100%" />
+            <div class="row">
+                <div class="col-md-6">
+                    <label><b>Free Text Search</b></label>
+                    <div class="form-group">
+                        <input type="text" name="query" v-model="query" v-on:change="submit()" style="width:100%" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,11 +98,11 @@
         methods: {
             submit() {
                 if (this.idCode) {
-                    this.$router.push({"path":"/jspdb/show?id=" + this.idCode});
+                    this.$router.push({"path":"/show?id=" + this.idCode});
                 } else if (this.seqQuery) {
-                    this.$router.push({"path": "/jspdb/blast?query=" + this.seqQuery});
+                    this.$router.push({"path": "/blast?query=" + this.cleanHeader(this.seqQuery)});
                 } else {
-                    this.$router.push({"path": "/jspdb/search?query=" + JSON.stringify(this.$data)});
+                    this.$router.push({"path": "/search?query=" + JSON.stringify(this.$data)});
                 }
                 
             },
@@ -117,6 +114,23 @@
                 this.seqQuery = '';
                 this.checkedComps = [];
                 this.checkedExp = [];
+            },
+            cleanHeader(sq) {
+                let seq = '';
+                let lines = sq.split('\n');
+                let shouldSkip = false;
+                lines.every( line => {
+                    if (!line.match('>')) {
+                        seq += line;
+                    } else {
+                        if (shouldSkip) {
+                            return false;
+                        }
+                        shouldSkip = true;
+                    }
+                    return true;
+                })
+                return seq;
             },
             async getFile(e) {
                 const file = e.target.files[0];
@@ -133,7 +147,7 @@
         },
 
         async fetch() {
-            const response = await fetch('http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?glob')
+            const response = await fetch(this.$config.APIPrefix + '?glob')
             if (response.ok) {
                 const pdbInfo = await response.json();
                 this.compTypes = pdbInfo.compType;

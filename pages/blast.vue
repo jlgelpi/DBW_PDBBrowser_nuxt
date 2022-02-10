@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 <tr v-for="hit in blastResults">
-                    <td>{{ hit.idCode}}_{{ hit.sub }}</td>
+                    <td><nuxt-link :to="{path:'show', query:{'id':hit.idCode}}">{{ hit.idCode}}_{{ hit.sub }}</nuxt-link></td>
                     <td>{{ hit.tip}}</td>	
                     <td>{{ hit.desc }}</td>
                     <td>{{ hit.compound }}</td>
@@ -44,8 +44,7 @@ export default  {
     },
     async fetch() {
             this.query = this.$route.query.query;
-            const prefix = 'http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?';
-            const dataResponse = await fetch(prefix + "blast=" + this.$route.query.query);
+            const dataResponse = await fetch(this.$config.APIPrefix + "?blast=" + this.$route.query.query);
             if (dataResponse.ok) { 
                 this.blastResults = await dataResponse.json();
                 this.pending = 0;
