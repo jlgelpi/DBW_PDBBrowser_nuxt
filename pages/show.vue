@@ -70,7 +70,8 @@ export default {
             pdbData : {},
             compTypes : {},
             expClasses : {},
-            expTypes : {}
+            expTypes : {},
+            error:{}
         }
     },
     async fetch() {
@@ -86,8 +87,12 @@ export default {
             const dataResponse = await fetch(prefix + "show=" + this.$route.query.id)
             if (dataResponse.ok) {
                 this.pdbData = await dataResponse.json();
-                this.PDBLink += this.pdbData.idCode;
-                this.ImgLink += this.pdbData.idCode.toLowerCase() + ".png";
+                if (this.pdbData.idCode) {
+                    this.PDBLink += this.pdbData.idCode;
+                    this.ImgLink += this.pdbData.idCode.toLowerCase() + ".png";
+                } else {
+                    this.error = this.pdbData;
+                }
             }
         },
     fetchOnServer: false

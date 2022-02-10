@@ -19,8 +19,8 @@
                 <div class="form-group">
                     <label><b>Resolution:</b></label>
                     <p>                    
-                        From <input type="text" name="minRes" size="5" v-model="inputData.minRes">
-                        to <input type="text" name="maxRes" size="5" v-model="inputData.maxRes" >
+                        From <input type="text" name="minRes" size="5" v-model="minRes">
+                        to <input type="text" name="maxRes" size="5" v-model="maxRes" >
                     </p>
                 </div>
             </div>
@@ -32,7 +32,8 @@
                     <label>Compound Type:</label>
                     <div class="form-check">
                         <div style="display:block" v-for='(comp, index) in compTypes' :key="index">
-                            <input class="form-check-input" type="checkbox" :id="index" :value="index" v-model="checkedComps" /> {{ comp }}
+                            <input class="form-check-input" type="checkbox" :id="index" :value="index" 
+                            v-model="checkedComps" /> {{ comp }}
                         </div>
                     </div>
                 </div>
@@ -44,7 +45,8 @@
                     <label>Exp. Type:</label>
                     <div class="form-check">
                         <div v-for='(exp, index) in expClasses' :key='index'>
-                            <input class="form-check-input" type="checkbox" :id="index" :value="index" v-model="checkedExp" /> {{ exp }}
+                            <input class="form-check-input" type="checkbox" :id="index" :value="index" 
+                            v-model="checkedExp" /> {{ exp }}
                         </div>
                     </div>
                 </div>
@@ -55,7 +57,7 @@
             <div class="col-md-6">
                 <label><b>Free Text Search</b></label>
                 <div class="form-group">
-                    <input type="text" name="query" v-model="inputData.query" style="width:100%" />
+                    <input type="text" name="query" v-model="query" style="width:100%" />
                 </div>
             </div>
         </div>
@@ -63,8 +65,10 @@
             <div class="col-md-6">
                 <label><h4>Sequence search</h4></label>
                 <div class="form-group">
-                    <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%" v-model="seqQuery"></textarea><br>
-                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%" @change="getFile"/>
+                    <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%"
+                     v-model="seqQuery"></textarea><br>
+                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%"
+                     @change="getFile"/>
                 </div>
             </div>
         </div>
@@ -89,28 +93,30 @@
                 seqQuery:'',
                 compTypes:[],
                 expClasses:[],
+                checkedComps:[],
+                checkedExp:[]
             }
         },
 
         methods: {
             submit() {
                 if (this.idCode) {
-                    this.$router.push({"path":"/show?id=" + this.idCode})
+                    this.$router.push({"path":"/show?id=" + this.idCode});
                 } else if (this.seqQuery) {
-                    this.$router.push({"path": "/blast?query=" + this.seqQuery})
+                    this.$router.push({"path": "/blast?query=" + this.seqQuery});
                 } else {
-                    this.$router.push({"path": "/search?query=" + this})
+                    this.$router.push({"path": "/search?query=" + JSON.stringify(this.$data)});
                 }
                 
             },
             reset() {
-                this.idCode = ''
-                this.minRes = '0.0'
-                this.maxRes = 'Inf'
-                this.query = ''
-                this.seqQuery = ''
-                this.checkedComps = []
-                this.checkedExp = []
+                this.idCode = '';
+                this.minRes = '0.0';
+                this.maxRes = 'Inf';
+                this.query = '';
+                this.seqQuery = '';
+                this.checkedComps = [];
+                this.checkedExp = [];
             },
             async getFile(e) {
                 const file = e.target.files[0];
