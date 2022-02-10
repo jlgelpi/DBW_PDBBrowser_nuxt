@@ -2,6 +2,7 @@
 <div class="container">
     <h1>{{ title }} - {{ pdbData.idCode}}</h1>
     <p v-if="$fetchState.pending">Waiting data...</p>
+    <p v-else-if="error.message">{{error.message}}</p>
     <table v-else class="table table-hover">
     <tbody>
         <tr>
@@ -81,14 +82,16 @@ export default {
                 this.expTypes = pdbInfo.expType;
             }           
 
-            const dataResponse = await fetch(prefix + "show=" + this.$route.query.id)
+            const dataResponse = await fetch(
+                prefix + "show=" + this.$route.query.id
+            )
             if (dataResponse.ok) {
                 this.pdbData = await dataResponse.json();
                 if (this.pdbData.idCode) {
                     this.PDBLink += this.pdbData.idCode;
                     this.ImgLink += this.pdbData.idCode.toLowerCase() + ".png";
                 } else {
-                    this.error = this.pdbData;
+                    this.error = this.pdbData
                 }
             }
         },

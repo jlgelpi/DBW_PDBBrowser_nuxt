@@ -101,11 +101,11 @@
         methods: {
             submit() {
                 if (this.idCode) {
-                    this.$router.push({"path":"/show?id=" + this.idCode});
+                    this.$router.push({"path":"/jspdb/show?id=" + this.idCode});
                 } else if (this.seqQuery) {
-                    this.$router.push({"path": "/blast?query=" + this.seqQuery});
+                    this.$router.push({"path": "/jspdb/blast?query=" + this.seqQuery});
                 } else {
-                    this.$router.push({"path": "/search?query=" + JSON.stringify(this.$data)});
+                    this.$router.push({"path": "/jspdb/search?query=" + JSON.stringify(this.$data)});
                 }
                 
             },
