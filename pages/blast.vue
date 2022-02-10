@@ -2,9 +2,13 @@
     <div class="container">
         <h1>{{title}}</h1>
         <p>Query: {{ query }}</p>
-        <p>Num hits: {{blastResults.length}}</p>   
-        <table border="0" cellspacing="2" cellpadding="4" id="blastTable">
-            <thead>
+        <div v-if="pending">
+            <p>Waiting for results...</p>
+        </div>
+        <div v-else>    
+            <p>Num hits: {{blastResults.length}}</p>   
+            <table v-if="blastResults.length" border="0" cellspacing="2" cellpadding="4" id="blastTable">
+                <thead>
                 <tr>
                     <th>idCode</th>
                     <th>Type</th>
@@ -23,6 +27,7 @@
                 </tr>
             </tbody>
         </table>
+        </div>
     </div>
 </template>
 
@@ -32,8 +37,9 @@ export default  {
         return {
             title : "PDBBrowser Blast search",
             query : '',
-            blastResults: [],
-            error:{}
+            blastResults : [],
+            error : {},
+            pending: 1
         }
     },
     async fetch() {
@@ -42,13 +48,12 @@ export default  {
             const dataResponse = await fetch(prefix + "blast=" + this.$route.query.query);
             if (dataResponse.ok) { 
                 this.blastResults = await dataResponse.json();
+                this.pending = 0;
                 if (this.blastResults.hits) {
                     this.blastResults = this.blastResults.hits;
                 } else {
                     this.error = this.blastResults;
                 }
-
-                console.log(this.blastResults)
             }
     }
 }
