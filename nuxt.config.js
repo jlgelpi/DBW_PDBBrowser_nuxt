@@ -1,6 +1,6 @@
 export default {
     components: true,
-    target: 'static',
+    ssr: false,
     plugins: ['~/plugins/bootstrap-vue.js'],
     publicRuntimeConfig: {
         baseURL: process.env.BASE_URL,
@@ -14,5 +14,8 @@ export default {
     },
     router: {
         base: '/jspdb/'
-    }
+    },
+    buildModules: [
+        '@nuxtjs/vuetify'
+    ]
 }
