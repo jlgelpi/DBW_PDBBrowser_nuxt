@@ -48,7 +48,7 @@ export default  {
     },
     async fetch() {
             const formatSeq = (s) => {
-                return s.replace(/(.{80})/g, '$1\n'); 
+                return s.replace(/[\n\r]/g,'').replace(/(.{80})/g, '$1\n'); 
             };
             this.query = formatSeq(this.$route.query.query);
             const dataResponse = await fetch(
