@@ -24,7 +24,7 @@
                     ></v-text-field>
                 </template>
                 <template #item.idCode="{ item }">
-                    <nuxt-link :to = "`/show?id=${item.idCode}`">{{ item.idCode }}</nuxt-link>
+                    <nuxt-link :to = "`/show?id=${item.idCode}`">{{ item.idCode }}_{{ item.sub }}</nuxt-link>
                 </template>
             </v-data-table>
         </div>
