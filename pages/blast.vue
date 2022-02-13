@@ -23,6 +23,9 @@
                         class="mx-4"
                     ></v-text-field>
                 </template>
+                <template #item.idCode="{ item }">
+                    <a :href = "`/show?id=${item.idCode}`">{{ item.idCode }}</a>
+                </template>
             </v-data-table>
         </div>
     </div>

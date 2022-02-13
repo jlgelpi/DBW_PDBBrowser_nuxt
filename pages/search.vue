@@ -2,7 +2,7 @@
     <div class="container">
         <h1>{{title}}</h1>
         <p>Query:</br>
-        <pre> {{ query }}</pre>
+        <pre> {{ query | pretty }}</pre>
         </p>
         <p v-if="$fetchState.pending">Waiting for results...</p>
         <div v-else>
@@ -23,6 +23,10 @@
                         class="mx-4"
                     ></v-text-field>
                 </template>
+                <template #item.idCode="{ item }">
+                    <a :href = "`/show?id=${item.idCode}`">{{ item.idCode }}</a>
+                </template>
+
             </v-data-table>
         </div>
     </div>
@@ -60,6 +64,11 @@ export default  {
                 }
 
             }
+    },
+    filters: {
+        pretty: function(value) {
+            return JSON.stringify(JSON.parse(value), null, 1);
+        }
     }
 }
 </script>
