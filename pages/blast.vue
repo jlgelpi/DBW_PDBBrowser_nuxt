@@ -24,7 +24,7 @@
                     ></v-text-field>
                 </template>
                 <template #item.idCode="{ item }">
-                    <a :href = "`/show?id=${item.idCode}`">{{ item.idCode }}</a>
+                    <nuxt-link :to = "`/show?id=${item.idCode}`">{{ item.idCode }}</nuxt-link>
                 </template>
             </v-data-table>
         </div>

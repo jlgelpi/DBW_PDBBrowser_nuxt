@@ -102,7 +102,13 @@
                 } else if (this.seqQuery) {
                     this.$router.push({"path": "/blast?query=" + this.cleanHeader(this.seqQuery)});
                 } else {
-                    this.$router.push({"path": "/search?query=" + JSON.stringify(this.$data)});
+                    const query = {}
+                    if (this.minRes != '0.0') {query.minRes = this.minRes;}
+                    if (this.maxRes != 'Inf') {query.maxRes = this.maxRes;}
+                    if (this.query) {query.query = this.query};
+                    if (this.checkedComps) {query.checkedComps = this.checkedComps};
+                    if (this.checkedExp) {query.checkedExp = this.checkedExp};
+                    this.$router.push({"path": "/search?query=" + JSON.stringify(query)});
                 }
                 
             },

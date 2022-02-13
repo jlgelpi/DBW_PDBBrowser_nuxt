@@ -13,7 +13,8 @@ export default {
         ]
     },
     router: {
-        base: '/jspdb/'
+//        base: '/jspdb/'
+          base: '/formacio/jspdb/'
     },
     buildModules: [
         '@nuxtjs/vuetify'
