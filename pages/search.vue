@@ -67,7 +67,7 @@ export default  {
     },
     filters: {
         pretty: function(value) {
-            return JSON.stringify(JSON.parse(value), null, 1);
+            return JSON.stringify(JSON.parse(value), null, 2);
         }
     }
 }
