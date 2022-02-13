@@ -11,8 +11,19 @@
                 :headers = "headers"
                 :items = "results"
                 :items-per-page="10"
-                :class="elevation-1"
-            ></v-data-table>
+                class = "elevation-1"
+                :dense = "true"
+                item-key="results.idCode"
+                :search= "search"
+            >
+                <template v-slot:top>
+                    <v-text-field
+                        v-model="search"
+                        label="Search"
+                        class="mx-4"
+                    ></v-text-field>
+                </template>
+            </v-data-table>
         </div>
     </div>
 </template>
@@ -25,8 +36,9 @@ export default  {
             query : '',
             results : [],
             error : {},
+            search: '',
             headers : [
-                { text: 'PDB. Id.', value: 'idcode'},
+                { text: 'PDB. Id.', value: 'idCode'},
                 { text: 'Header', value: 'header'},
                 { text: 'Title', value: 'compound'},
                 { text: 'Resolution', value: 'resolution'},
@@ -37,7 +49,8 @@ export default  {
     },
     async fetch() {
             this.query = this.$route.query.query;
-            const dataResponse = await fetch(this.config.APIPrefix + "?search=" + this.$route.query.query);
+            const url = this.$config.APIPrefix + "?search=" + this.$route.query.query;
+            const dataResponse = await fetch(url);
             if (dataResponse.ok) { 
                 this.results = await dataResponse.json();
                 if (this.results.hits) {

@@ -12,7 +12,18 @@
                 :items = "blastResults"
                 :items-per-page="10"
                 class = "elevation-1"
-            ></v-data-table>
+                :item-key = "blastResults.idCode"
+                :dense = "true"
+                :search = "search"
+            >
+                <template v-slot:top>
+                    <v-text-field
+                        v-model="search"
+                        label="Search"
+                        class="mx-4"
+                    ></v-text-field>
+                </template>
+            </v-data-table>
         </div>
     </div>
 </template>
@@ -25,6 +36,7 @@ export default  {
             query : '',
             blastResults : [],
             error : {},
+            search : '',
             headers: [
                 { text: 'PDB Id.', value: 'idCode'},
                 { text: 'Type', value:'tip'},
