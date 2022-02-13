@@ -9,8 +9,8 @@
             <td>PDB reference</td>
             <td>{{ pdbData.idCode }}</td>
             <td rowspan="5">
-                <a :href="PDBLink" target="_blank">
-                    <img :src="ImgLink" border="0" width="250" ><br>
+                <a :href="`${this.$config.PDBLink}${pdbData.idCode.toUpperCase()}`" target="_blank">
+                    <img :src="`${this.$config.ImgLink}${pdbData.idCode.toLowerCase()}.png`" border="0" width="250" ><br>
                         Link to Protein Data Bank</a>
             </td>
         </tr>
@@ -66,9 +66,7 @@
 export default {
     data() {
         return {
-            title : "PDBBrowser",
-            PDBLink : "http://www.pdb.org/pdb/explore.do?structureId=",
-            ImgLink : "http://mmb.pcb.ub.es/api/pdb/",
+            title : "PDB Browser",
             pdbData : {},
             error:{}
         }
@@ -79,10 +77,7 @@ export default {
             )
             if (dataResponse.ok) {
                 this.pdbData = await dataResponse.json();
-                if (this.pdbData.idCode) {
-                    this.PDBLink += this.pdbData.idCode;
-                    this.ImgLink += this.pdbData.idCode.toLowerCase() + ".png";
-                } else {
+                if (!this.pdbData.idCode) {
                     this.error = this.pdbData
                 }
             }

@@ -3,8 +3,9 @@ export default {
     ssr: false,
     plugins: ['~/plugins/bootstrap-vue.js'],
     publicRuntimeConfig: {
-        baseURL: process.env.BASE_URL,
-        APIPrefix: "http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/"
+        APIPrefix: "http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/",
+        PDBLink : "https://www.rcsb.org/structure/",
+        ImgLink : "http://mmb.pcb.ub.es/api/pdb/"
     },
     head: {
         title: 'PDB-Browser 2022 (Nuxt version)',
