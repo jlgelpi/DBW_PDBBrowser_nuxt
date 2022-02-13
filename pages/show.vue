@@ -34,7 +34,7 @@
         <tr>
             <!--$expTypeArray is generated in globals.inc.php-->
             <td>Experiment type</td> 
-            <td colspan="2">{{ expTypes[pdbData.idExpType].ExpType }}</td>
+            <td colspan="2">{{ pdbData.ExpType }}</td>
         </tr>
         <tr>
             <td>Authors</td>
@@ -70,20 +70,12 @@ export default {
             PDBLink : "http://www.pdb.org/pdb/explore.do?structureId=",
             ImgLink : "http://mmb.pcb.ub.es/api/pdb/",
             pdbData : {},
-            expTypes : {},
             error:{}
         }
     },
     async fetch() {
-            const prefix = 'http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/?';
-            const response = await fetch(prefix + 'glob')
-            if (response.ok) {
-                const pdbInfo = await response.json();
-                this.expTypes = pdbInfo.expType;
-            }           
-
             const dataResponse = await fetch(
-                prefix + "show=" + this.$route.query.id
+                `${this.$config.APIPrefix}?show=${this.$route.query.id}`
             )
             if (dataResponse.ok) {
                 this.pdbData = await dataResponse.json();

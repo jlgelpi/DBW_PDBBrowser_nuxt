@@ -4,7 +4,7 @@
         <p>Query:<br/>
         <pre>{{ query }}</pre>
         </p>
-        <p v-if="$fetchState.pending">Waiting for results...</p>
+        <p v-if="$fetchState.pending">Waiting for Blast results...</p>
         <div v-else>    
             <p>Num hits: {{blastResults.length}}</p>   
             <v-data-table v-if="blastResults.length"
@@ -55,7 +55,7 @@ export default  {
             };
             this.query = formatSeq(this.$route.query.query);
             const dataResponse = await fetch(
-                this.$config.APIPrefix + "?blast=" + this.$route.query.query
+                `${this.$config.APIPrefix}?blast=${this.$route.query.query}`
             );
             if (dataResponse.ok) { 
                 this.blastResults = await dataResponse.json();

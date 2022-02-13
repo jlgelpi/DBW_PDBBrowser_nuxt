@@ -63,7 +63,7 @@
                 <label><h4>Sequence search</h4></label>
                 <div class="form-group">
                     <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%"
-                     v-model="seqQuery"></textarea><br>
+                     v-model="seqQuery" placeholder="Input Sequence only"></textarea><br>
                     Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%"
                      @change="getFile"/>
                 </div>
@@ -98,17 +98,17 @@
         methods: {
             submit() {
                 if (this.idCode) {
-                    this.$router.push({"path":"/show?id=" + this.idCode});
+                    this.$router.push({path:`/show?id=${this.idCode}`});
                 } else if (this.seqQuery) {
-                    this.$router.push({"path": "/blast?query=" + this.cleanHeader(this.seqQuery)});
+                    this.$router.push({path: `/blast?query=${this.cleanHeader(this.seqQuery)}`});
                 } else {
                     const query = {}
                     if (this.minRes != '0.0') {query.minRes = this.minRes;}
                     if (this.maxRes != 'Inf') {query.maxRes = this.maxRes;}
                     if (this.query) {query.query = this.query};
-                    if (this.checkedComps) {query.checkedComps = this.checkedComps};
-                    if (this.checkedExp) {query.checkedExp = this.checkedExp};
-                    this.$router.push({"path": "/search?query=" + JSON.stringify(query)});
+                    if (this.checkedComps.length) {query.checkedComps = this.checkedComps};
+                    if (this.checkedExp.length) {query.checkedExp = this.checkedExp};
+                    this.$router.push({"path": `/search?query=${JSON.stringify(query)}`});
                 }
                 
             },
@@ -149,6 +149,7 @@
                     reader.readAsBinaryString(f);
                 });
                 this.seqQuery = await readData(file);
+                this.seqQuery = this.cleanHeader(this.seqQuery);
             }
         },
 

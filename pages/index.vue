@@ -9,7 +9,7 @@
     export default {
         data() {
             return {
-                title: 'DBW - PDBBrowser (SPA Version)',
+                title: 'DBW - PDBBrowser (NuxtJs Version)',
             }
         },
         head() {                            
@@ -19,7 +19,7 @@
                     {
                         hid: 'description',
                         name: 'description',
-                        content: 'Vue-JS version of DBW PDBBrowser'
+                        content: 'Nuxt-JS version of DBW PDBBrowser'
                     },
                     {  hid: 'viewport',
                        name: 'viewport',

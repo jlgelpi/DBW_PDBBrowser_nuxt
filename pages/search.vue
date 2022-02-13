@@ -4,7 +4,7 @@
         <p>Query:</br>
         <pre> {{ query | pretty }}</pre>
         </p>
-        <p v-if="$fetchState.pending">Waiting for results...</p>
+        <p v-if="$fetchState.pending">Waiting for search results...</p>
         <div v-else>
             <p>Num hits: {{results.length}}</p>   
             <v-data-table v-if="results.length" 
@@ -53,7 +53,7 @@ export default  {
     },
     async fetch() {
             this.query = this.$route.query.query;
-            const url = this.$config.APIPrefix + "?search=" + this.$route.query.query;
+            const url = `${this.$config.APIPrefix}?search=${this.$route.query.query}`;
             const dataResponse = await fetch(url);
             if (dataResponse.ok) { 
                 this.results = await dataResponse.json();
