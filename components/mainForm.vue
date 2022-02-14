@@ -1,82 +1,77 @@
 <template>
-    <div id="mainForm">
-        <div class="row" style="padding-bottom:5px;border-bottom: solid 1px">
-            <div class="form-group">
-                <label><b>PDB Id</b></label>
-                <input type="text" v-on:change="submit()" name="idCode" size="5" maxlength="4" v-model="idCode" placeholder="PDB Code"/>
-            </div>
-        </div>
-        <div style="padding-bottom:5px;border-bottom: solid 1px">
-            <div class="row">
-                <h3>Search fields</h3>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label><b>Resolution:</b></label>
-                        <p>                    
-                            From <input type="text" name="minRes" size="5" v-model="minRes">
-                            to <input type="text" name="maxRes" size="5" v-model="maxRes" >
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Compound Type:</label>
-                        <div class="form-check">
-                            <div style="display:block" v-for='(comp, index) in compTypes' :key="index">
-                                <input class="form-check-input" type="checkbox" :id="index" :value="index" 
-                                v-model="checkedComps" /> {{ comp }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>Exp. Type:</label>
-                        <div class="form-check">
-                            <div v-for='(exp, index) in expClasses' :key='index'>
-                                <input class="form-check-input" type="checkbox" :id="index" :value="index" 
-                                v-model="checkedExp" /> {{ exp }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <label><b>Free Text Search</b></label>
-                    <div class="form-group">
-                        <input type="text" name="query" v-model="query" v-on:change="submit()" style="width:100%" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row" style="border-bottom: 1px solid">
-            <div class="col-md-6">
-                <label><h4>Sequence search</h4></label>
-                <div class="form-group">
-                    <textarea class="form-control" name="seqQuery" rows="4" cols="60" style="width:100%"
-                     v-model="seqQuery" placeholder="Input Sequence only"></textarea><br>
-                    Upload sequence file: <input type="file" name="seqFile" width="50" style="width:100%"
-                     @change="getFile"/>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <p>
-            <button class="btn btn-primary" v-on:click="submit()">Submit</button>
-            <button class="btn btn-primary" v-on:click="reset()">Reset</button>
-            </p>
-        </div>
-    <!-- </form> -->
-    </div>
+<v-app>
+    <v-main>
+        <v-container>
+            <v-form ref="mainForm">
+                <v-card>
+                    <v-container>
+                    <v-text-field 
+                        @change="submit()" 
+                        name="idCode" 
+                        maxlength="4" 
+                        v-model="idCode" 
+                        placeholder="PDB Code"
+                        label = "PDB Id"
+                    />
+                    </v-container>
+                </v-card>
+                <v-card>
+                    <v-container>
+                    <h4>Search fields</h4>
+                    <v-row>
+                        <v-col sm="3">
+                            <v-text-field
+                                label = "Min. resolution"
+                                name="minRes" 
+                                v-model="minRes"
+                            />
+                        </v-col>
+                        <v-col sm="3">
+                            <v-text-field
+                                label = "Max. resolution"
+                                name="maxRes" 
+                                v-model="maxRes" 
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <h6>Type of compound</h6>
+                        <v-col sm="2" v-for='(comp, index) in compTypes' :key="index">
+                            <v-checkbox :id="index" :value="index" v-model="checkedComps" :label="comp"/>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <h6>Type of experiment</h6>
+                        <v-col sm="2" v-for='(exp, index) in expClasses' :key="index">
+                            <v-checkbox :id="index" :value="index" v-model="checkedExp" :label="exp"/>
+                        </v-col>
+                    </v-row>
+                    <v-text-field 
+                        @change="submit()" 
+                        name="query"  
+                        v-model="query" 
+                        label = "Free text search"
+                    />
+                    </v-container>
+                </v-card>
+                <v-card>
+                    <v-container>
+                        <h4>Sequence search</h4>
+                        <v-textarea name="seqQuery" cols="60" v-model="seqQuery" placeholder="Raw Sequence only"></v-textarea>
+                        
+                        <v-file-input 
+                            name="seqFile" id="seqFile" @change="getFile" 
+                            style="width:50%"
+                            label="Upload sequence file"
+                        />
+                    </v-container>
+                </v-card>
+                <v-btn @click="submit()">Submit</v-btn>
+                <v-btn @click="reset()">Reset</v-btn>
+            </v-form>
+        </v-container>
+    </v-main>
+</v-app>
 </template>
 
 <script>
@@ -139,8 +134,7 @@
                 return seq;
             },
             async getFile(e) {
-                const file = e.target.files[0];
-                
+                const file = e;
                 if (!file) return;
                 
                 const readData = (f) => new Promise((resolve) => {
