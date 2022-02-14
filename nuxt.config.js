@@ -1,7 +1,6 @@
 export default {
     components: true,
     ssr: false,
-    plugins: ['~/plugins/bootstrap-vue.js'],
     publicRuntimeConfig: {
         APIPrefix: "http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/",
         PDBLink : "https://www.rcsb.org/structure/",
