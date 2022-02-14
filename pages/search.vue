@@ -1,35 +1,39 @@
 <template>
-    <div class="container">
-        <h1>{{title}}</h1>
-        <p>Query:</br>
-        <pre> {{ query | pretty }}</pre>
-        </p>
-        <p v-if="$fetchState.pending">Waiting for search results...</p>
-        <div v-else>
-            <p>Num hits: {{results.length}}</p>   
-            <v-data-table v-if="results.length" 
-                :headers = "headers"
-                :items = "results"
-                :items-per-page="10"
-                class = "elevation-1"
-                :dense = "true"
-                item-key="results.idCode"
-                :search= "search"
-            >
-                <template v-slot:top>
-                    <v-text-field
-                        v-model="search"
-                        label="Search"
-                        class="mx-4"
-                    ></v-text-field>
-                </template>
-                <template #item.idCode="{ item }">
-                    <nuxt-link :to = "`/show?id=${item.idCode}`">{{ item.idCode }}</nuxt-link>
-                </template>
-
-            </v-data-table>
-        </div>
-    </div>
+    <v-app>
+        <v-main>
+            <v-container>
+                <h1>{{title}}</h1>
+                <p>Query:</br>
+                    <pre> {{ query | pretty }}</pre>
+                </p>
+                <p v-if="$fetchState.pending">Waiting for search results...</p>
+                <div v-else>
+                    <p>Num hits: {{results.length}}</p>   
+                    <v-data-table v-if="results.length" 
+                        :headers = "headers"
+                        :items = "results"
+                        :items-per-page="10"
+                        class = "elevation-1"
+                        :dense = "true"
+                        item-key="results.idCode"
+                        :search= "search"
+                    >
+                        <template v-slot:top>
+                            <v-text-field
+                                v-model="search"
+                                label="Search"
+                                class="mx-4"
+                            ></v-text-field>
+                        </template>
+                        <template #item.idCode="{ item }">
+                            <nuxt-link :to = "`/show?id=${item.idCode}`">{{ item.idCode }}</nuxt-link>
+                        </template>
+                    </v-data-table>
+                </div>
+                <v-btn @click="newSearch()">New Search</v-btn>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
@@ -69,6 +73,12 @@ export default  {
         pretty: function(value) {
             return JSON.stringify(JSON.parse(value), null, 2);
         }
-    }
+    },
+    methods: {
+        newSearch() {
+            this.$router.push("/");
+        }
+    },
+    fetchOnServer: false
 }
 </script>
