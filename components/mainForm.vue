@@ -35,13 +35,13 @@
                         </v-col>
                     </v-row>
                     <v-row>
-                        <h6>Type of compound</h6>
+                        <v-col><h5>Type of compound</h5></v-col>
                         <v-col sm="2" v-for='(comp, index) in compTypes' :key="index">
                             <v-checkbox :id="index" :value="index" v-model="checkedComps" :label="comp"/>
                         </v-col>
                     </v-row>
                     <v-row>
-                        <h6>Type of experiment</h6>
+                        <v-col><h5>Type of experiment</h5></v-col>
                         <v-col sm="2" v-for='(exp, index) in expClasses' :key="index">
                             <v-checkbox :id="index" :value="index" v-model="checkedExp" :label="exp"/>
                         </v-col>

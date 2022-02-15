@@ -1,8 +1,12 @@
 <template>
-    <div class= "container">
-        <h1>{{title}}</h1>
-        <mainForm />
-    </div>
+    <v-app>
+        <v-main>
+            <v-container>
+                <h1>{{title}}</h1>
+                <mainForm />
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
