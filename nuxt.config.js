@@ -2,9 +2,9 @@ export default {
     components: true,
     ssr: false,
     publicRuntimeConfig: {
-        APIPrefix: "http://mmb.irbbarcelona.org/formacio/~dbw00/PDBBrowser/api/",
+        APIPrefix: "https://formacio.bq.ub.edu/PDBBrowser/api/",
         PDBLink : "https://www.rcsb.org/structure/",
-        ImgLink : "http://mmb.pcb.ub.es/api/pdb/"
+        ImgLink : "https://mmb.irbbarcelona.org/api/pdb/"
     },
     head: {
         title: 'PDB-Browser 2022 (Nuxt version)',
@@ -13,8 +13,7 @@ export default {
         ]
     },
     router: {
-//        base: '/jspdb/'
-          base: '/formacio/jspdb/'
+        base: '/jspdb/'
     },
     buildModules: [
         '@nuxtjs/vuetify'

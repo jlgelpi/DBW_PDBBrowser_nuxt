@@ -13,17 +13,17 @@
     export default {
         data() {
             return {
-                title: 'DBW - PDBBrowser (NuxtJs Version)',
+                title: 'DBW - PDBBrowser (VueJS Version)',
             }
         },
-        head() {                            
+        head() {
             return {
                 title: this.title,
                 meta: [
                     {
                         hid: 'description',
                         name: 'description',
-                        content: 'Nuxt-JS version of DBW PDBBrowser'
+                        content: 'VueJS version of DBW PDBBrowser'
                     },
                     {  hid: 'viewport',
                        name: 'viewport',
@@ -31,7 +31,7 @@
                     }
                 ]
             }
-        }       
+        }
     }
 
 </script>
